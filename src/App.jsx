@@ -432,6 +432,53 @@ function resetAll() {
 
   return (
     <div className="min-h-screen bg-slate-100 text-slate-900 p-4 md:p-8">
+
+<div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr 1fr",
+    alignItems: "center",
+    width: "100%",
+    background: "white",
+    borderBottom: "1px solid #e2e8f0",
+    padding: "12px 16px",
+  }}
+>
+  <div style={{ display: "flex", justifyContent: "flex-start" }}>
+    <img
+      src="/questions/logoCanP.png"
+      alt="Logo CAN Primaire"
+      style={{
+        width: "120px",
+        height: "auto",
+        objectFit: "contain",
+      }}
+    />
+  </div>
+
+  <div
+    style={{
+      textAlign: "center",
+      fontWeight: "bold",
+      fontSize: "32px",
+    }}
+  >
+    CAN Primaire 2026
+  </div>
+
+  <div
+    style={{
+      textAlign: "right",
+      fontWeight: "900",
+      fontSize: "24px",
+    }}
+  >
+    {step === "quiz" ? formatTime(timeLeft) : ""}
+  </div>
+</div>
+
+
+
       <div className="max-w-6xl mx-auto">
         <div className="bg-white rounded-3xl shadow-lg border border-slate-200 overflow-hidden">
          
@@ -443,7 +490,7 @@ function resetAll() {
             </h1> 
             
             <p className="text-slate-600 mt-2">
-              Finales CAN ZPO - 9 minutes maximum.
+              Finales CAN ZPO
             </p>
 
             
@@ -451,6 +498,7 @@ function resetAll() {
 
 {step === "setup" && (
   <div className="p-6 md:p-8 grid gap-6 max-w-2xl">
+        
     <div>
       <label className="block text-sm font-semibold mb-2">Établissement</label>
       <select
@@ -582,10 +630,10 @@ function resetAll() {
     </div>
 
     <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-sm text-amber-900">
-      <ul className="list-disc pl-5 space-y-1">
+      <ul style={{ listStyleType: "none", paddingLeft: 0 }}>
         <li>20 questions pour les CE1 et CE2.</li>
         <li>30 questions pour les CM1 et CM2.</li>
-        <li>Temps total maximum : 9 minutes.</li>
+        <li>Temps maximum autorisé : 9 minutes.</li>
         <li>Pour les fractions, utilisez la barre "/" comme par exemple 1/2.</li>
         <li> </li>
         <li>Vous pouvez passer une question et y revenir plus tard.</li>
@@ -618,10 +666,15 @@ function resetAll() {
       color: timeLeft <= 30 ? "#dc2626" : "#0f172a"
     }}
 >
-  {formatTime(timeLeft)}
+  
 </div>
       <div className="mb-5">
-        <div className="grid grid-cols-5 gap-2 max-w-sm mx-auto">
+
+        <div
+  className="grid grid-cols-5 gap-2 max-w-sm mx-auto"
+  style={{ marginBottom: "30px" }}
+>
+  
           {questions.map((question, index) => {
             const locked = Boolean(lockedAnswers[question.id]);
             const active = index === currentIndex;
@@ -644,7 +697,7 @@ function resetAll() {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+      <div className="mt-6 bg-white rounded-2xl border border-slate-200 overflow-hidden">
         <img
           src={currentQuestion.imageUrl}
           alt={`Question ${currentIndex + 1}`}
