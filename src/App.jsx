@@ -275,7 +275,7 @@ useEffect(() => {
 
 useEffect(() => {
   if (step === "quiz" && timeLeft === 0 && !isFinishing) {
-    handleFinish(true);
+    handleFinish(true, lockedAnswers);
   }
 }, [timeLeft, step, isFinishing]);
 
@@ -284,7 +284,7 @@ useEffect(() => {
   if (step !== "quiz" || isFinishing) return;
 
   if (timeLeft <= 0) {
-    handleFinish(true);
+    handleFinish(true, lockedAnswers);
     return;
   }
 
@@ -298,7 +298,7 @@ useEffect(() => {
   }, 1000);
 
   return () => clearInterval(interval);
-}, [step, timeLeft, isFinishing]);
+}, [step, timeLeft, isFinishing, lockedAnswers]);
 
   const currentQuestion = questions[currentIndex];
   const currentQuestionId = currentQuestion?.id;
