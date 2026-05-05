@@ -457,8 +457,19 @@ function resetAll() {
     alignItems: "center",
   }}
 >
-  {/* logo supprimé temporairement */}
+  {/* Logo */}
+  <img
+    src="/questions/logoCanP.png"
+    alt="Logo CAN Primaire"
+    style={{
+      width: "120px",
+      height: "auto",
+      objectFit: "contain",
+      display: "block",
+    }}
+  />
 
+  {/* Titre centré */}
   <div
     style={{
       position: "absolute",
@@ -472,6 +483,7 @@ function resetAll() {
     CAN Primaire 2026
   </div>
 
+  {/* Chrono à droite */}
   <div
     style={{
       marginLeft: "auto",
