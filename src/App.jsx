@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
-const QUIZ_DURATION_SECONDS = 9 * 60;
+const QUIZ_DURATION_SECONDS = 10 * 60;
 const SHEET_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw7PSm4sB4nj-u6N6pAz_JeCBNdyLyWC4CTTKpL5scKP0_UrQmqrMwjHA0D_Gyrbqa5/exec";
 
 function driveImage(fileId) {
@@ -263,6 +263,9 @@ export default function App() {
   const hasFinishedRef = useRef(false);
   const [sendSuccess, setSendSuccess] = useState(true);
 
+  const [endTime, setEndTime] = useState(null);
+
+
 useEffect(() => {
   if (step !== "quiz" || isFinishing) return;
 
@@ -273,6 +276,7 @@ useEffect(() => {
   return () => clearInterval(interval);
 }, [step, isFinishing]);
 
+
 useEffect(() => {
   if (step === "quiz" && timeLeft === 0 && !isFinishing) {
     handleFinish(true, lockedAnswers);
@@ -280,25 +284,30 @@ useEffect(() => {
 }, [timeLeft, step, isFinishing]);
 
 
+
 useEffect(() => {
-  if (step !== "quiz" || isFinishing) return;
+  if (step !== "quiz" || isFinishing || !endTime) return;
 
-  if (timeLeft <= 0) {
-    handleFinish(true, lockedAnswers);
-    return;
-  }
+  const updateTimer = () => {
+    const secondsRemaining = Math.max(
+      0,
+      Math.ceil((endTime - Date.now()) / 1000)
+    );
 
-  const interval = setInterval(() => {
-    setTimeLeft((prev) => {
-      if (prev <= 1) {
-        return 0;
-      }
-      return prev - 1;
-    });
-  }, 1000);
+    setTimeLeft(secondsRemaining);
+
+    if (secondsRemaining === 0) {
+      handleFinish(true, lockedAnswers);
+    }
+  };
+
+  updateTimer(); // mise à jour immédiate
+
+  const interval = setInterval(updateTimer, 250);
 
   return () => clearInterval(interval);
-}, [step, timeLeft, isFinishing, lockedAnswers]);
+}, [step, endTime, isFinishing, lockedAnswers]);
+
 
   const currentQuestion = questions[currentIndex];
   const currentQuestionId = currentQuestion?.id;
@@ -334,6 +343,7 @@ function startQuiz() {
   setCurrentIndex(0);
   setTimeLeft(QUIZ_DURATION_SECONDS);
   setSubmittedAt(null);
+  setEndTime(Date.now() + QUIZ_DURATION_SECONDS * 1000);
   setStep("quiz");
 }
 
@@ -633,7 +643,7 @@ function resetAll() {
       <ul style={{ listStyleType: "none", paddingLeft: 0 }}>
         <li>20 questions pour les CE1 et CE2.</li>
         <li>30 questions pour les CM1 et CM2.</li>
-        <li>Temps maximum autorisé : 9 minutes.</li>
+        <li>Temps maximum autorisé : 10 minutes.</li>
         <li>Pour les fractions, utilisez la barre "/" comme par exemple 1/2.</li>
         <li> </li>
         <li>Vous pouvez passer une question et y revenir plus tard.</li>
