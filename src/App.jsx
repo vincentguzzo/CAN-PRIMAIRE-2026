@@ -443,36 +443,30 @@ function resetAll() {
 }
 
   return (
-    <div className="min-h-screen bg-slate-100 text-slate-900 p-4 md:p-8">
+   <div className="min-h-screen bg-slate-100 text-slate-900 p-4 md:p-8">
 
 <div
   style={{
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr 1fr",
-    alignItems: "center",
+    position: "relative",
     width: "100%",
-    background: "white",
+    background: "#dbeafe",
     borderBottom: "1px solid #e2e8f0",
     padding: "12px 16px",
+    minHeight: "70px",
+    display: "flex",
+    alignItems: "center",
   }}
 >
-  <div style={{ display: "flex", justifyContent: "flex-start" }}>
-    <img
-      src="/questions/logoCanP.png"
-      alt="Logo CAN Primaire"
-      style={{
-        width: "120px",
-        height: "auto",
-        objectFit: "contain",
-      }}
-    />
-  </div>
+  {/* logo supprimé temporairement */}
 
   <div
     style={{
-      textAlign: "center",
+      position: "absolute",
+      left: "50%",
+      transform: "translateX(-50%)",
       fontWeight: "bold",
-      fontSize: "32px",
+      fontSize: "28px",
+      whiteSpace: "nowrap",
     }}
   >
     CAN Primaire 2026
@@ -480,7 +474,7 @@ function resetAll() {
 
   <div
     style={{
-      textAlign: "right",
+      marginLeft: "auto",
       fontWeight: "900",
       fontSize: "24px",
     }}
@@ -490,9 +484,8 @@ function resetAll() {
 </div>
 
 
-
       <div className="max-w-6xl mx-auto">
-        <div className="bg-white rounded-3xl shadow-lg border border-slate-200 overflow-hidden">
+        <div className="bg-white rounded-3xl shadow-lg overflow-hidden">
          
           <div className="p-6 md:p-8 border-b border-slate-200 bg-slate-50">
            <h1 className="text-2xl md:text-3xl font-bold">
