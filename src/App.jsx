@@ -403,7 +403,9 @@ async function handleFinish(isAutomatic = false, answersToUse = lockedAnswers) {
   hasFinishedRef.current = true;
   setIsFinishing(true);
 
-const secondsUsed = QUIZ_DURATION_SECONDS - timeLeft;
+const secondsUsed = isAutomatic
+  ? QUIZ_DURATION_SECONDS
+  : QUIZ_DURATION_SECONDS - timeLeft;
 
 const resultData = {
   school: school === "Autre" ? customSchool.trim() : school,
