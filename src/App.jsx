@@ -245,6 +245,20 @@ async function saveResultToSheet(result) {
   }
 }
 
+function preloadImages(questions) {
+  return Promise.all(
+    questions.map(
+      (question) =>
+        new Promise((resolve, reject) => {
+          const img = new Image();
+          img.onload = resolve;
+          img.onerror = reject;
+          img.src = question.imageUrl;
+        })
+    )
+  );
+}
+
 export default function App() {
   const [step, setStep] = useState("setup");
   const [school, setSchool] = useState("");
@@ -261,7 +275,7 @@ export default function App() {
   const questions = useMemo(() => QUESTION_BANK[level] || [], [level]);
   const [isFinishing, setIsFinishing] = useState(false);
   const hasFinishedRef = useRef(false);
-  const [sendSuccess, setSendSuccess] = useState(true);
+  const [sendSuccess, setSendSuccess] = useState(null);
 
   const [endTime, setEndTime] = useState(null);
 
@@ -315,7 +329,7 @@ useEffect(() => {
   const score = useMemo(() => computeScore(questions, lockedAnswers), [questions, lockedAnswers]);
   const answeredCount = Object.keys(lockedAnswers).length;
 
-function startQuiz() {
+async function startQuiz() {
   const finalSchool = school === "Autre" ? customSchool.trim() : school;
 
   if (!school) {
@@ -337,6 +351,13 @@ function startQuiz() {
     alert("Veuillez écrire le prénom de l'élève.");
     return;
   }
+
+try {
+  await preloadImages(questions);
+} catch (error) {
+  alert("Certaines images n'ont pas pu être chargées. Vérifiez la connexion internet avant de commencer.");
+  return;
+}
 
   setDraftAnswers({});
   setLockedAnswers({});
@@ -417,10 +438,10 @@ const resultData = {
 };
 
   setSubmittedAt(new Date().toISOString());
+  setSendSuccess(null);
   setStep("result");
 
   const success = await saveResultToSheet(resultData);
-
   setSendSuccess(success);
 
   console.log("Résultat élève", resultData);
@@ -440,6 +461,7 @@ function resetAll() {
   setStep("setup");
   hasFinishedRef.current = false;
   setIsFinishing(false);
+  setSendSuccess(null);
 }
 
   return (
@@ -780,15 +802,26 @@ function resetAll() {
               <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6">
                 <h2 className="text-2xl font-bold">Résultat</h2>
 
-                {sendSuccess ? (
-              <p className="text-green-600 font-semibold text-lg mt-2">
-              Vos réponses ont bien été enregistrées ✅
-              </p>
-              ) : (
+{sendSuccess === null && (
+  <p className="text-slate-600 font-semibold text-lg mt-2">
+    Enregistrement du résultat en cours...
+  </p>
+)}
+
+{sendSuccess === true && (
+  <p className="text-green-600 font-semibold text-lg mt-2">
+    Vos réponses ont bien été enregistrées ✅
+  </p>
+)}
+
+{sendSuccess === false && (
   <p className="text-red-600 font-semibold text-lg mt-2">
     ⚠️ Problème de connexion. Résultat non envoyé.
   </p>
 )}
+
+
+
                 {!sendSuccess && (
   <div className="mt-4">
     <p className="text-red-600 font-semibold">
