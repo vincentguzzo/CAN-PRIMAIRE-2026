@@ -245,18 +245,21 @@ async function saveResultToSheet(result) {
   }
 }
 
-function preloadImages(questions) {
-  return Promise.all(
-    questions.map(
-      (question) =>
-        new Promise((resolve, reject) => {
-          const img = new Image();
-          img.onload = resolve;
-          img.onerror = reject;
-          img.src = question.imageUrl;
-        })
-    )
-  );
+async function preloadImages(questions) {
+  const promises = questions.map((question) => {
+    return fetch(question.imageUrl)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Erreur chargement image");
+        }
+        return response.blob();
+      })
+      .then((blob) => {
+        return URL.createObjectURL(blob);
+      });
+  });
+
+  return Promise.all(promises);
 }
 
 export default function App() {
@@ -278,6 +281,8 @@ export default function App() {
   const [sendSuccess, setSendSuccess] = useState(null);
 
   const [endTime, setEndTime] = useState(null);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+  
 
 
 useEffect(() => {
@@ -354,6 +359,7 @@ async function startQuiz() {
 
 try {
   await preloadImages(questions);
+  setImagesLoaded(true);
 } catch (error) {
   alert("Certaines images n'ont pas pu être chargées. Vérifiez la connexion internet avant de commencer.");
   return;
@@ -463,6 +469,7 @@ function resetAll() {
   hasFinishedRef.current = false;
   setIsFinishing(false);
   setSendSuccess(null);
+  setImagesLoaded(false);
 }
 
   return (
