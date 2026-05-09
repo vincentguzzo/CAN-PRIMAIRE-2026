@@ -365,6 +365,7 @@ try {
   setTimeLeft(QUIZ_DURATION_SECONDS);
   setSubmittedAt(null);
   setEndTime(Date.now() + QUIZ_DURATION_SECONDS * 1000);
+  setSendSuccess(null);
   setStep("quiz");
 }
 
@@ -822,22 +823,23 @@ function resetAll() {
 
 
 
-                {!sendSuccess && (
-  <div className="mt-4">
-    <p className="text-red-600 font-semibold">
-      ⚠️ Problème de connexion. Résultat non envoyé.
-    </p>
+                {sendSuccess === false && (
+                  <div className="mt-4">
+                    <p className="text-red-600 font-semibold">
+                      ⚠️ Problème de connexion. Résultat non envoyé.
+                    </p>
 
-    <button
-      onClick={async () => {
-        const stored = localStorage.getItem("pendingResult");
-        if (!stored) return;
+                  <button
+                    onClick={async () => {
+                    const stored = localStorage.getItem("pendingResult");
+                    if (!stored) return;
 
-        const parsed = JSON.parse(stored);
-        const success = await saveResultToSheet(parsed);
+                    const parsed = JSON.parse(stored);
+                    const success = await saveResultToSheet(parsed);
 
-        if (success) setSendSuccess(true);
-      }}
+                    if (success) setSendSuccess(true);
+                  }}
+
       className="mt-2 px-4 py-2 bg-red-600 text-white rounded-xl"
     >
       Renvoyer le résultat
