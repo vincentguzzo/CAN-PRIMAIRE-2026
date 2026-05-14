@@ -814,9 +814,12 @@ function resetAll() {
                 <h2 className="text-2xl font-bold">Résultat</h2>
 
 {sendSuccess === null && (
-  <p className="text-slate-600 font-semibold text-lg mt-2">
-    Enregistrement du résultat en cours...
-  </p>
+  <div className="text-slate-600 font-semibold text-lg mt-2">
+    <p>Enregistrement du résultat en cours...</p>
+    <p className="text-base mt-1">
+      Merci de ne pas fermer cette page.
+    </p>
+  </div>
 )}
 
 {sendSuccess === true && (
@@ -844,10 +847,12 @@ function resetAll() {
                     const stored = localStorage.getItem("pendingResult");
                     if (!stored) return;
 
+                    setSendSuccess(null);
+
                     const parsed = JSON.parse(stored);
                     const success = await saveResultToSheet(parsed);
 
-                    if (success) setSendSuccess(true);
+                    setSendSuccess(success);
                   }}
 
       className="mt-2 px-4 py-2 bg-red-600 text-white rounded-xl"
