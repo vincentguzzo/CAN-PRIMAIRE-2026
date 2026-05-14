@@ -7,7 +7,6 @@ function driveImage(fileId) {
   return `https://lh3.googleusercontent.com/d/${fileId}=w1200`;
 }
 
-
 const QUESTIONS_CE1 = [
   { id: "ce1-1", imageUrl: "/questions/CE1_01.png", correctAnswer: "65" },
   { id: "ce1-2", imageUrl: "/questions/CE1_02.png", correctAnswer: "70" },
@@ -25,7 +24,7 @@ const QUESTIONS_CE1 = [
   { id: "ce1-14", imageUrl: "/questions/CE1_14.png", correctAnswer: "B" },
   { id: "ce1-15", imageUrl: "/questions/CE1_15.png", correctAnswer: "7" },
   { id: "ce1-16", imageUrl: "/questions/CE1_16.png", correctAnswer: "A" },
-  { id: "ce1-17", imageUrl: "/questions/CE1_17.png", correctAnswer: "10h45" },
+  { id: "ce1-17", imageUrl: "/questions/CE1_17.png", correctAnswer: { anyOf: ["10h45", "10h45min"] } },
   { id: "ce1-18", imageUrl: "/questions/CE1_18.png", correctAnswer: "21" },
   { id: "ce1-19", imageUrl: "/questions/CE1_19.png", correctAnswer: "24" },
   { id: "ce1-20", imageUrl: "/questions/CE1_20.png", correctAnswer: "92" },
